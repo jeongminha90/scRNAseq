@@ -1,0 +1,129 @@
+---
+title: "preprocessing"
+author: "Bum Suk Kim"
+date: '2020 12 14 '
+output: html_document
+---
+
+
+Install previous version of Seurat
+```{r setup, include=FALSE}
+install.packages('devtools')
+# Replace '2.3.0' with your desired version
+devtools::install_version(package = 'Seurat', version = package_version('2.3.3'))
+```
+
+## Load required libraries.
+```{r setup, include=FALSE}
+library(DropletUtils)
+library(scater)
+library(biomaRt)
+library(scran)
+library(Seurat) ## v2.2.3
+```
+14 samples are agrregated by "cellranger aggr"
+
+## Load input file from 10X cellranger output
+```{r cars}
+dir_name <- "aggr/outs/raw_gene_bc_matrices_mex/GRCh38"
+list.files(dir_name)
+
+sce <- read10xCounts(dir_name)
+colnames(sce) <- colData(sce)$Barcode
+
+set.seed(100)
+e.out <- emptyDrops(counts(sce))  ## Cells that have UMI counts lower than 100 are empty cells.
+
+is.cell <- e.out$FDR <= 0.05
+
+sce <- sce[,which(e.out$FDR <= 0.05)]
+sce<-sce[rowSums(counts(sce))>0,]
+
+sample_id <- read.csv(file = "aggregation_csv.csv")
+colData(sce)$condition <- sample_id$condition[as.numeric(gsub("(\\w){0,}-", "", colData(sce)$Barcode))]
+colnames(sce) <- colData(sce)$Barcode
+for (i in 1:14){
+  colnames(sce) <- gsub(paste0("^(\\w*)-", i, "$"),
+                        paste0(sample_id$condition[i],"-\\1"),
+                        colnames(sce))
+}
+```
+
+
+## Filter low-quality cells
+```{r pressure, echo=FALSE}
+date = Sys.Date()
+ensembl <- useMart(biomart = "ENSEMBL_MART_ENSEMBL", dataset="mmusculus_gene_ensembl", host="www.ensembl.org")
+ensemblGenes <- getBM(attributes=c('ensembl_gene_id', 'external_gene_name',  'chromosome_name', 'gene_biotype'), mart=ensembl)
+rownames(ensemblGenes) <- ensemblGenes[,1]
+save(ensemblGenes, file=paste("ensemblGenes",format(date, format="%Y%m%d"),".RData"))
+
+mtGenes = ensemblGenes[ensemblGenes[,3]=="MT",]
+is.mito = rownames(sce) %in% mtGenes[,1]
+length(is.mito[is.mito == TRUE])
+sce = calculateQCMetrics(sce,  feature_controls=list(Mito=is.mito))
+sce = runPCA(sce, pca_data_input = "colData")  
+
+conditions <- unique(as.vector(colData(sce)$condition))
+scesetFiltered= sce[, colData(sce)[,"log10_total_counts"]> 2 &
+                      colData(sce)[,"pct_counts_Mito"]< 10]
+scesetFiltered= scesetFiltered[,colData(scesetFiltered)[,"log10_total_features_by_counts"]> 3 &
+                                colData(scesetFiltered)[,"condition"] == "iNSC"]
+scesetFiltered= scesetFiltered[,colData(scesetFiltered)[,"log10_total_features_by_counts"]> 2.5 &
+                                !colData(scesetFiltered)[,"condition"] == "iNSC"]
+```
+
+
+## Filter low-quality cells
+```{r pressure, echo=FALSE}
+date = Sys.Date()
+ensembl <- useMart(biomart = "ENSEMBL_MART_ENSEMBL", dataset="mmusculus_gene_ensembl", host="www.ensembl.org")
+ensemblGenes <- getBM(attributes=c('ensembl_gene_id', 'external_gene_name',  'chromosome_name', 'gene_biotype'), mart=ensembl)
+rownames(ensemblGenes) <- ensemblGenes[,1]
+save(ensemblGenes, file=paste("ensemblGenes",format(date, format="%Y%m%d"),".RData"))
+
+mtGenes = ensemblGenes[ensemblGenes[,3]=="MT",]
+is.mito = rownames(sce) %in% mtGenes[,1]
+length(is.mito[is.mito == TRUE])
+sce = calculateQCMetrics(sce,  feature_controls=list(Mito=is.mito))
+sce = runPCA(sce, pca_data_input = "colData")  
+
+conditions <- unique(as.vector(colData(sce)$condition))
+scesetFiltered= sce[, colData(sce)[,"log10_total_counts"]> 2 &
+                      colData(sce)[,"pct_counts_Mito"]< 10]
+scesetFiltered= scesetFiltered[,colData(scesetFiltered)[,"log10_total_features_by_counts"]> 3 &
+                                colData(scesetFiltered)[,"condition"] == "iNSC"]
+scesetFiltered= scesetFiltered[,colData(scesetFiltered)[,"log10_total_features_by_counts"]> 2.5 &
+                                !colData(scesetFiltered)[,"condition"] == "iNSC"]
+```
+
+
+## Normalization
+```{r pressure, echo=FALSE}
+library(scran)
+clusters <- quickCluster(scesetFiltered, method= "igraph")
+scesetFiltered <- computeSumFactors(scesetFiltered, cluster=clusters)
+scesetFiltered <- normalize(scesetFiltered)
+save(scesetFiltered, file = "scesetFiltered.RData")
+```
+
+
+## Find highly variable genes(HVGs)
+```{r pressure, echo=FALSE}
+var.fit <- trendVar(scesetFiltered, parametric=TRUE, use.spikes=F)
+var.out <- decomposeVar(scesetFiltered, var.fit)
+hvg <- var.out[which(var.out$FDR <= 0.05 & var.out$bio > .1),]
+hvg <- hvg[order(hvg$bio, decreasing=TRUE),]
+
+```
+
+
+## Make seurat object
+```{r pressure, echo=FALSE}
+miPSC_seurat <- Convert(scesetFiltered, to = "seurat")  ### Seurat v2 object
+miPSC_seurat@var.genes <- rownames(hvg)
+miPSC_seurat@scale.data <- logcounts(scesetFiltered[rownames(hvg),])
+miPSC_seurat <- RunPCA(miPSC_seurat,pcs.compute =50, weight.by.var = FALSE)
+miPSC_seurat <- RunUMAP(miPSC_seurat, reduction.use = "pca", dims.use = 1:30)
+save(miPSC_seurat, file = "miPSC_seurat.RData")
+```
