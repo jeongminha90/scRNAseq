@@ -69,55 +69,55 @@ p0<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Pou5f1)) +
   ggtitle("Pou5f1") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red", midpoint = -.5) + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red", midpoint = -.5) + 
   theme(legend.title = element_blank())
 p1<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Pluripotency)) + 
   ggtitle("Pluripotency") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p2<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Neural.identity)) + 
   ggtitle("Neural.identity") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.3380548,1.4161030))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p3<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=MEF.identity)) + 
   ggtitle("MEF.identity") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p4<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Epithelial.identity)) + 
   ggtitle("Epithelial.identity") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p5<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Shisa8)) + 
   ggtitle("Shisa8") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p6<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Dsp)) + 
   ggtitle("Dsp") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p7<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Cell.cycle)) + 
   ggtitle("Cell.cycle") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 p8<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=SASP)) + 
   ggtitle("SASP") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + #, limits =c(-0.8415039,2.0307720))+
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
   theme(legend.title = element_blank())
 
 (p1|p2|p3|p4) / (p5|p6|p7|p8)
