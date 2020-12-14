@@ -1,8 +1,13 @@
+# R code for generation of plots for 
+# Clustering, UMAP, Cell Signatures, and Pseudotime projection in
+# iPSC/iNSC reprogramming  cells between D5~D7
+#######################################################################
 
-# R code for iPSC/iNSC reprogramming  cells at D5~D7
-# data are already normalized/scaled
-# UMAP/clusters included
+# Seurat3 installation
+install.packages('Seurat')
+BiocManager::install("slingshot")
 
+#
 library(Seurat)
 library(slingshot)
 library(tidyverse)
@@ -65,12 +70,7 @@ data.frame(df$Row.names) %>%
   dplyr::count(df.Row.names_1)
 
 theme_set(theme_classic())
-p0<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Pou5f1)) + 
-  ggtitle("Pou5f1") +
-  geom_point(size=.2) +
-  coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red", midpoint = -.5) + 
-  theme(legend.title = element_blank())
+
 p1<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Pluripotency)) + 
   ggtitle("Pluripotency") +
   geom_point(size=.2) +
@@ -87,7 +87,7 @@ p3<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=MEF.identity)) +
   ggtitle("MEF.identity") +
   geom_point(size=.2) +
   coord_fixed() +
-  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") + 
+  scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") +
   theme(legend.title = element_blank())
 p4<- ggplot(df2, aes(x=UMAP_1, y=UMAP_2, color=Epithelial.identity)) + 
   ggtitle("Epithelial.identity") +
@@ -196,3 +196,4 @@ plot(reducedDim(sds), col = addalpha(cell_colors,0.7), pch = 19, cex = .3, asp=1
 lines(sds, lwd = 3, col = 'black', lty = 3)
 #
 
+sessionInfo()
