@@ -1,6 +1,4 @@
-# Trajectory and signature analyses for iPSC/iNSC reprogramming intermdeiate cells
-
-# <sub>Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"</sub>
+# Trajectory and signature analyses for iPSC/iNSC reprogramming intermdeiate cells<br>Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 
 
 ### Preprocessing.Rmd
