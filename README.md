@@ -14,10 +14,7 @@ Title: "?????????????"
 
 # D5-D7_tranjectory_signature.Rmd
 <li><a href="https://figshare.com/articles/dataset/D5-D7_mipsc_normalized_scaled/13383191">Download this dataset</a></li>
-<li></li>
-<li></li>
-<li></li>
-
+<li>Rmarkdown for analysis of D5~D7 iPSC/iNSC reprogramming intermediate cells</li>
 
 # gene_set_scores.csv
 <li><a href="https://figshare.com/articles/dataset/gene_set_scores_csv/13383212">Download this dataset</a></li>
