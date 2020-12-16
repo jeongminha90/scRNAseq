@@ -1,0 +1,194 @@
+---
+title: "D5-D7 Seurat3-Signatures-Slingshot"
+author: "Byungkuk Min"
+date: "12/14/2020"
+output: html_document
+---
+
+
+## Install required libraries
+```{r setup, include=FALSE}
+install.packages('devtools')
+# Seurat v3.1.5
+devtools::install_version(package = 'Seurat')
+# slingshot v1.8.0
+BiocManager::install("slingshot")
+```
+
+
+
+## Load required libraries and input files
+```{r setup, include=FALSE}
+library(Seurat)
+library(slingshot)
+library(tidyverse)
+library(patchwork)
+library(splitstackshape)
+```
+
+
+
+## Load the preprocessed Seurat3 object
+```{r setup, include=FALSE}
+setwd("~/00--NGS/scRNA-seq_Dr.KimJangHwan/scRNAseq")
+load(file="mipsc_D5-D7_Seurat3_normalized_scaled.RData")
+```
+
+
+
+## plot UMAP
+```{r umap, echo=TRUE}
+DimPlot(mipsc, reduction = "umap", 
+        group.by = "conds", pt.size = 0.2, 
+        label = F, repel = TRUE,
+        order =c("D6_iNSC","D6_iPSC","D5","D7_iNSC","D7_iPSC")) +
+  coord_fixed() +
+  scale_color_manual(values = c("pink","turquoise","darkgreen","red","blue"))
+
+DimPlot(mipsc, reduction = "umap", 
+        group.by = "conds", pt.size = 0.2, 
+        label = F, repel = TRUE, 
+        split.by="conds", ncol = 3,
+        order =c("D7_iNSC","D7_iPSC","D6_iNSC","D6_iPSC","D5")) +
+  coord_fixed() +
+  scale_color_manual(values = c("darkgreen","red","blue","pink","turquoise"))
+```
+
+
+
+## plot Clusters 
+```{r clustering, echo=TRUE}
+p1<- DimPlot(mipsc, reduction = "umap",
+             label = T, size=.7, label.size = 5) +
+  coord_fixed() +  ggtitle("clustering: D5 - D7")
+
+dta <- mipsc@meta.data %>% group_by(conds, seurat_clusters)
+total <- mipsc@meta.data %>% count(seurat_clusters)
+
+my_col = c("pink","turquoise","darkgreen","red","blue")
+
+p2<- ggplot(dta, aes(x=seurat_clusters)) + theme_classic() +
+  geom_bar(aes(fill = conds)) + 
+  geom_text(data=total, 
+            aes(x=seurat_clusters, y=2600, label=as.factor(n)), 
+            size = 4, angle=90, hjust=1) +
+  labs(x="Clusters", y = "Cell counts") +
+  scale_color_manual(values = my_col)
+
+p3<- ggplot(dta, aes(x=seurat_clusters)) + theme_classic() +
+  geom_bar(position="fill", aes(fill=conds)) +
+  geom_text(data=total, 
+            aes(x=seurat_clusters, y=1.15, label=as.factor(n)),
+            size = 4, angle=90, hjust=1) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x="Clusters", y = "Fraction") +
+  scale_color_manual(values = my_col)
+
+p1 + (p2/p3) + plot_layout(ncol = 2, widths = c(5,5))
+
+```
+
+
+
+## plot cell signatures
+```{r signatures, echo=TRUE}
+
+gs <- read.csv("~/00--NGS/scRNA-seq_Dr.KimJangHwan/scRNAseq/gene_set_scores.csv", header = T, row.names = 1)
+embeddings <- Embeddings(mipsc, reduction = "umap")
+df <- merge(data.frame(mipsc$conds), gs, by=0)
+df2 <- merge(df, embeddings, by.x="Row.names", by.y=0)
+colnames(df2)
+
+p <- list()
+for (sig in names(df2[,3:16])){
+  p[[sig]]<- ggplot(df2, aes_string(x="UMAP_1", y="UMAP_2", color= sig)) +
+    #ggtitle(paste0(sig)) +
+    geom_point(size=.2) +
+    coord_fixed() +
+    scale_color_gradient2(low="darkblue", mid="lightgrey", high="red") 
+    #theme(legend.title = element_blank()) + theme_bw()
+}
+wrap_plots(p, ncol = 5)
+
+```
+
+
+
+## functions for cell color assignment
+## run this code chuck prior to 'slingshot' analysis
+```{r signatures, echo=TRUE}
+# # FUNCTION 1: cell_pal (https://bustools.github.io/BUS_notebooks_R/slingshot.html)
+#' Assign a color to each cell based on some value
+#' @param cell_vars Vector indicating the value of a variable associated with cells.
+#' @param pal_fun Palette function that returns a vector of hex colors, whose
+#' argument is the length of such a vector.
+#' @param ... Extra arguments for pal_fun.
+#' @return A vector of hex colors with one entry for each cell.
+cell_pal <- function(cell_vars, pal_fun,...) {
+  if (is.numeric(cell_vars)) {
+    pal <- pal_fun(100, ...)
+    return(pal[cut(cell_vars, breaks = 100)])
+  } else {
+    categories <- sort(unique(cell_vars))
+    pal <- setNames(pal_fun(length(categories), ...), categories)
+    return(pal[cell_vars])
+  }
+}
+
+# # FUNCTION 2: add alpha (https://github.com/mylesmharrison/colorRampPaletteAlpha)
+addalpha <- function(colors, alpha=1.0) {
+  r <- col2rgb(colors, alpha=T)
+  # Apply alpha
+  r[4,] <- alpha*255
+  r <- r/255.0
+  return(rgb(r[1,], r[2,], r[3,], r[4,]))
+}
+
+colorRampPaletteAlpha <- function(colors, n=32, interpolate='linear') {
+  # Create the color ramp normally
+  cr <- colorRampPalette(colors, interpolate=interpolate)(n)
+  # Find the alpha channel
+  a <- col2rgb(colors, alpha=T)[4,]
+  # Interpolate
+  if (interpolate=='linear') {
+    l <- approx(a, n=n)
+  } else {
+    l <- spline(a, n=n)
+  }
+  l$y[l$y > 255] <- 255 # Clamp if spline is > 255
+  cr <- addalpha(cr, l$y/255.0)
+  return(cr)
+}
+```
+
+
+
+## Slingshot for trajectory analysis
+```{r slingshot, echo=TRUE}
+library(slingshot)
+library(scales)
+library(viridis)
+library(shape)
+
+
+# run Slingshot
+cl <- mipsc$seurat_clusters
+sds <- slingshot(Embeddings(mipsc, "umap"), 
+                 clusterLabels = cl,
+                 start.clus = 0,
+                 end.clus = NULL,
+                 stretch = 0,
+                 allow.breaks = FALSE)
+
+par(mfrow = c(1, 2))
+cell_colors <- cell_pal(cl, hue_pal())
+plot(reducedDim(sds), col = addalpha(cell_colors,0.7), 
+     pch = 19, cex = .3, asp=1)
+lines(sds, lwd = 2, type = 'lineages', col = 'black')
+
+plot(reducedDim(sds), col = addalpha(cell_colors,0.7), 
+     pch = 19, cex = .3, asp=1)
+lines(sds, lwd = 3, col = 'black', lty = 3)
+
+
+```
