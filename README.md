@@ -1,5 +1,6 @@
-# R codes for single cell RNAseq analysis of 
-Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
+# R codes for single cell RNAseq analysis of iPSC/iNSC reprogramming intermdeiate cells
+
+__Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"__
 
 
 ### Preprocessing.Rmd
