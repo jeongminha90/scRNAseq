@@ -4,13 +4,14 @@ __Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 
 
 ### Preprocessing.Rmd
-*
-*
-*
+* [Download this dataset](https://figshare.com/s/ecf794cfe2776980f4de)
+* Rmarkdown for loading raw dataset & quality control
+* Seurat v2.3.x is required
+
 
 ### FigS11_S12.Rmd
-*
-*
+* [Download this dataset](https://figshare.com/s/2d5e45d42f50dc3c6d9c)
+* Rmarkdown for figure S11 & S12
 *
 
 ### D5-D7_tranjectory_signature.Rmd
