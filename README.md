@@ -12,7 +12,7 @@ Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 <li></li>
 <li></li>
 
-# D5-D7_tranjectory_signature.Rmd
+# Fig3.D5-D7_tranjectory_signature.Rmd
 <li><a href="https://figshare.com/articles/dataset/D5-D7_mipsc_normalized_scaled/13383191">Download this dataset</a></li>
 <li>Rmarkdown for trajectory and cell signature analyses of D5~D7 iPSC/iNSC reprogramming intermediate cells</li>
 <li><em><i>'gene_set_scores.csv'</i></em> is requried for cell signature analysis</li>
@@ -21,5 +21,3 @@ Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 <li><a href="https://figshare.com/articles/dataset/gene_set_scores_csv/13383212">Download this dataset</a></li>
 <li><em><i>'gene_set_scores'</i></em> used for plot cell identity signatures in D5-D7 cells</li>
 <li><em><i>'gene_set_scores'</i></em> were calculated by a function called <em><i>'gene_set_scores'</i></em> in <a href="https://broadinstitute.github.io/wot/">'WOT'</a></li>
-
-
