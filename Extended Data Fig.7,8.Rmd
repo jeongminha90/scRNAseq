@@ -1,5 +1,5 @@
 ---
-title: "Extended Data Fig.7,8"
+title: "Extended Data Fig.7,8_scRNAseq of OSKM-mediated reprogramming"
 author: "Bum Suk Kim"
 date: '2020 12 14 '
 output: html_document
