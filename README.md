@@ -26,5 +26,5 @@ __Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 * Rmarkdown for trajectory and cell signature analyses of D5~D7 iPSC/iNSC reprogramming intermediate cells
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Fig3_D5-D7_trajectory_signature.Rmd)
 * Download datasets used in the analysis
- * [`mipsc_D5-D7_Seurat3_normalized_scaled.RData`](https://figshare.com/articles/dataset/D5-D7_mipsc_normalized_scaled/13383191):Seurat object of cells in D5~D7
- * [`gene set scores`](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212) for plotting the cell signatures by [`WOT 'gene set scores' function`](https://broadinstitute.github.io/wot/cli_documentation/).
+ * [`mipsc_D5-D7_Seurat3_normalized_scaled.RData`](https://figshare.com/articles/dataset/D5-D7_mipsc_normalized_scaled/13383191): Seurat object of cells in D5~D7
+ * [`gene set scores`](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212): for plotting the cell signatures by [`WOT 'gene set scores' function`](https://broadinstitute.github.io/wot/cli_documentation/).
