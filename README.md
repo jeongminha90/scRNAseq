@@ -21,5 +21,5 @@ __Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 
 ### gene_set_scores.csv
 * [Click here to download the dataset](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212)
-* `'gene_set_scores'` used for plot cell identity signatures in D5-D7 cells</li>
-* `'gene_set_scores'` were calculated by a function called `'gene_set_scores'` in ['WOT'](https://broadinstitute.github.io/wot/).
+* `gene_set_scores` used for plot cell identity signatures in D5-D7 cells</li>
+* `gene_set_scores` were calculated by a function called `gene_set_scores` in [`WOT`](https://broadinstitute.github.io/wot/).
