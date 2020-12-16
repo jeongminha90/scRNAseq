@@ -12,7 +12,7 @@ __Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 
 
 ### Extended_data_Fig.7_8.Rmd
-* Rmarkdown for figure S11 & S12
+* Rmarkdown for Extended data figure 7 & 8
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Extended%20Data%20Fig.7%2C8.Rmd)
 * [Click here to download the dataset used in the analysis](https://figshare.com/s/2d5e45d42f50dc3c6d9c)
 * [Phenotyping criteria](https://github.com/jeongminha90/scRNAseq/blob/main/Phenotyping%20Criteria.csv) for calculation of signature scores
