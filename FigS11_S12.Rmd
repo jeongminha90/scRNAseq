@@ -1,5 +1,5 @@
 ---
-title: "FigS11_S12"
+title: "Extended Data Fig.7,8"
 author: "Bum Suk Kim"
 date: '2020 12 14 '
 output: html_document
