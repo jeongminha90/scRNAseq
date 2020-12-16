@@ -11,7 +11,7 @@
 
 
 
-### Extended_data_Fig.7_8.Rmd
+### Extended_data_Fig7_8.Rmd
 * Rmarkdown for generation of UMAPs for whole cells and masking the signatures in Extended data figure 7 & 8
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Extended%20Data%20Fig.7%2C8.Rmd)
 * Download datasets used in the analysis
