@@ -1,0 +1,15 @@
+library_id,molecule_h5,condition
+D10_iNSC,/home2/warehouse/20180608_hiPSC/count/D10_iNSC/outs/molecule_info.h5,D10_iNSC
+D10_iPSC,/home2/warehouse/20180608_hiPSC/count/D10_iPSC/outs/molecule_info.h5,D10_iPSC
+D2,/home2/warehouse/20180608_hiPSC/count/D2/outs/molecule_info.h5,D2
+D4,/home2/warehouse/20180608_hiPSC/count/D4/outs/molecule_info.h5,D4
+D5,/home2/warehouse/20180608_hiPSC/count/D5/outs/molecule_info.h5,D5
+D6_iNSC,/home2/warehouse/20180608_hiPSC/count/D6_iNSC/outs/molecule_info.h5,D6_iNSC
+D6_iPSC,/home2/warehouse/20180608_hiPSC/count/D6_iPSC/outs/molecule_info.h5,D6_iPSC
+D7_iNSC,/home2/warehouse/20180608_hiPSC/count/D7_iNSC/outs/molecule_info.h5,D7_iNSC
+D7_iPSC,/home2/warehouse/20180608_hiPSC/count/D7_iPSC/outs/molecule_info.h5,D7_iPSC
+D8_iNSC,/home2/warehouse/20180608_hiPSC/count/D8_iNSC/outs/molecule_info.h5,D8_iNSC
+D8_iPSC,/home2/warehouse/20180608_hiPSC/count/D8_iPSC/outs/molecule_info.h5,D8_iPSC
+MEF,/home2/warehouse/20180608_hiPSC/count/MEF/outs/molecule_info.h5,MEF
+iNSC,/home2/warehouse/20180608_hiPSC/count/iNSC/outs/molecule_info.h5,iNSC
+iPSC,/home2/warehouse/20180608_hiPSC/count/iPSC/outs/molecule_info.h5,iPSC
