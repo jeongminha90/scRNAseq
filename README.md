@@ -7,7 +7,7 @@
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Preprocessing.Rmd)
 * Download dataset used in the analysis
   * [`raw.zip`](https://figshare.com/s/ecf794cfe2776980f4de): raw 10xGenomics output data
-  * [`Aggregation`](https://github.com/jeongminha90/scRNAseq/blob/main/aggregation_csv.csv): to assign sample group names to indexes
+  * [`aggregation_csv.csv`](https://github.com/jeongminha90/scRNAseq/blob/main/aggregation_csv.csv): to assign sample group names to indexes
 
 
 
@@ -16,7 +16,7 @@
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Extended%20Data%20Fig.7%2C8.Rmd)
 * Download datasets used in the analysis
   * [`miPSC_seurat.RData`](https://figshare.com/s/2d5e45d42f50dc3c6d9c): Seurat object of whole cells
-  * [`Phenotyping criteria`](https://github.com/jeongminha90/scRNAseq/blob/main/Phenotyping%20Criteria.csv): lists of gene sets used in the calculation of signature scores
+  * [`Phenotyping criteria.csv`](https://github.com/jeongminha90/scRNAseq/blob/main/Phenotyping%20Criteria.csv): lists of gene sets used in the calculation of signature scores
 
 
 
