@@ -1,5 +1,5 @@
 ---
-title: "Fig.3_D5-D7 Seurat3-Signatures-Slingshot"
+title: "Fig3 D5-D7 Seurat3-Signatures-Slingshot"
 author: "Byungkuk Min"
 date: "12/14/2020"
 output: html_document
