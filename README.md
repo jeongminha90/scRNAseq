@@ -4,23 +4,23 @@ __Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 
 
 ### Preprocessing.Rmd
-* [Download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Preprocessing.Rmd)
-* [Download the dataset used in the analysis](https://figshare.com/s/ecf794cfe2776980f4de)
 * Rmarkdown for loading raw dataset & quality control
-* `Seurat v2.3.x` is required
+* `Seurat v2.3.x` is required.
+* [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Preprocessing.Rmd)
+* [Download the dataset used in the analysis](https://figshare.com/s/ecf794cfe2776980f4de)
 
 
-### FigS11_S12.Rmd
-* [Click here to download the dataset used in the analysis](https://figshare.com/s/2d5e45d42f50dc3c6d9c)
+
+### Extended_data_Fig.7_8.Rmd
 * Rmarkdown for figure S11 & S12
-*
+* [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Extended%20Data%20Fig.7%2C8.Rmd)
+* [Click here to download the dataset used in the analysis](https://figshare.com/s/2d5e45d42f50dc3c6d9c)
+* [Phenotyping criteria](https://github.com/jeongminha90/scRNAseq/blob/main/Phenotyping%20Criteria.csv) for signature score calculation
+
+
 
 ### Fig3_D5-D7_tranjectory_signature.Rmd
+* [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Fig3_D5-D7_trajectory_signature.Rmd)
 * [Click here to download the dataset used in the analysis](https://figshare.com/articles/dataset/D5-D7_mipsc_normalized_scaled/13383191)
 * Rmarkdown for trajectory and cell signature analyses of D5~D7 iPSC/iNSC reprogramming intermediate cells
-* [`'gene_set_scores.csv'`](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212) is requried for cell signature analysis
-
-### gene_set_scores.csv
-* [Click here to download the dataset used in the analysis](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212)
-* `gene_set_scores` used for plot cell identity signatures in D5-D7 cells</li>
-* `gene_set_scores` were calculated by a function called `gene_set_scores` in [`WOT`](https://broadinstitute.github.io/wot/).
+* Precalcualted [`gene set scores`](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212) for plotting the cell signatures by [`WOT: 'gene set scores' funtion`](https://broadinstitute.github.io/wot/).
