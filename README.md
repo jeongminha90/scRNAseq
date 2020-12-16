@@ -8,7 +8,7 @@ __Title: "Analyzing intermediate populations during OSKM-mediated reprogramming"
 * `Seurat v2.3.x` is required.
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Preprocessing.Rmd)
 * [Download the dataset used in the analysis](https://figshare.com/s/ecf794cfe2776980f4de)
-* [Aggregation ]
+* [Aggregation](https://github.com/jeongminha90/scRNAseq/blob/main/aggregation_csv.csv) file to assign sample group names to indexes
 
 
 ### Extended_data_Fig.7_8.Rmd
