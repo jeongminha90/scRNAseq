@@ -25,4 +25,4 @@
 * [View & download the code](https://github.com/jeongminha90/scRNAseq/blob/main/Fig3_D5-D7_trajectory_signature.Rmd)
 * Download datasets used in the analysis
  * [`mipsc_D5-D7_Seurat3_normalized_scaled.RData`](https://figshare.com/articles/dataset/D5-D7_mipsc_normalized_scaled/13383191): Seurat object of cells in D5~D7
- * [`gene set scores`](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212): Pre-calculated gene set scores for plotting the cell signatures. The scores were calculated by the [`WOT 'gene set scores' command`](https://broadinstitute.github.io/wot/cli_documentation/).
+ * [`gene set scores`](https://figshare.com/articles/dataset/gene_set_scores_csv/13383212): Pre-calculated gene set scores for plotting the cell signatures. The scores were calculated by the [`WOT 'gene set scores'`](https://broadinstitute.github.io/wot/cli_documentation/) command.
