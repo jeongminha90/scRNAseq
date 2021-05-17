@@ -1,48 +1,32 @@
 ---
-title: "Extended Data Fig.7,8_scRNAseq of OSKM-mediated reprogramming"
+title: "Extended Data Fig.7,9_scRNAseq of OSKM-mediated reprogramming"
 author: "Bum Suk Kim"
 date: '2020 12 14 '
 output: html_document
 ---
 
-
-install previous version of Seurat
-```{r setup, include=FALSE}
-install.packages('devtools')
-# Replace '2.3.0' with your desired version
-devtools::install_version(package = 'Seurat', version = package_version('3.2.2'))
-```
-
 ## Load required libraries and input files.
 ```{r setup, include=FALSE}
-library(Seurat)  ##v3.2.2
+library(Seurat)
+library(scater)
 library(ggplot2)
 library(dplyr)
 library(viridis)
 library(pheatmap)
 library(RColorBrewer)
-
 ```
 
 
 ## Load input files
 ```{r cars}
-load("miPSC_seurat.RData")
+dIC_seurat3 = readRDS("dIC_seurat3_whole.rds")
 load("ensemblGenes 20180625 .RData")
-phen_crit <- read.csv("Phenotyping Criteria.csv")
+wot_sig <- read.csv("signiture_gene.csv") Schiebinger et al. 2019
 ```
-
-
-## Update seurat object v2.x to v3.x
-```{r cars}
-miPSC_seurat@scale.data = as.matrix(miPSC_seurat@scale.data)
-miPSC_seurat3 = UpdateSeuratObject(miPSC_seurat)
-```
-
 
 ## Set condition leve & color
 ```{r cars}
-iPSC_seurat3@meta.data$condition = factor(miPSC_seurat3@meta.data$condition,
+dIC_seurat3@meta.data$condition = factor(dIC_seurat3@meta.data$condition,
                                            levels =  c("MEF", "D2", "D4", "D5", "D6_iNSC" , "D7_iNSC",  "D8_iNSC",  "D10_iNSC",  
                                                        "iNSC",  "D6_iPSC", "D7_iPSC", "D8_iPSC", "D10_iPSC", "iPSC"))       
 
@@ -65,117 +49,49 @@ myColors_Whole <- c("red",                  #MEF
 
 
 
-## Calculate signature score
-```{r pressure, echo=FALSE}
-phen_crit = phen_crit[, c("Neural.progenitor", "Pluripotency", "MEF.identity")]
-for(i in 1:3){
-  genes = (as.vector(phen_crit[,i][!phen_crit[,i]==""]))
-  ens_ids = ensemblGenes$ensembl_gene_id[match(genes, ensemblGenes$external_gene_name, nomatch = 0)]
-  ext_genes = ensemblGenes$external_gene_name[match(genes,
-                                                    ensemblGenes$external_gene_name,
-                                                    nomatch = 0)]
-  if(i==1){
-    geneSets = list("colnames(phen_crit)[i]" = ext_genes)
-    names(geneSets) = colnames(phen_crit)[i]
-  }
-  else{geneSets[i] = list("colnames(phen_crit)[i]" = ext_genes)
-  names(geneSets)[i] <- colnames(phen_crit)[i]
-  }
-  
-}
-
-
-for (i in 1:3) {
-  genes = (as.vector(phen_crit[,i][!phen_crit[,i]==""]))
-  ens_ids = ensemblGenes$ensembl_gene_id[match(genes, ensemblGenes$external_gene_name, nomatch = 0)]
-  
-  exprs = miPSC_seurat@data[match(ens_ids, rownames(miPSC_seurat@data), nomatch = 0), ]
-  exprs = as.matrix(exprs[rowSums(as.matrix(exprs)) > 0,])
-  z_exprs = t(scale(t(exprs)))
-  z_exprs[z_exprs < -10] = -10
-  z_exprs[z_exprs > 10] = 10
-  Eexprs = colMeans(z_exprs)
-  if(i==1){Edat= data.frame( Eexprs)}else{Edat=cbind(Edat, Eexprs)}
-}
-
-```
-
-
 ## Plot signature score
 ```{r pressure, echo=FALSE}
 
-for (i in 1:3) {
+
+rownames(dIC_seurat3@assays$RNA@data) = uniquifyFeatureNames(ID = rownames(dIC_seurat3@assays$RNA@data),
+names = ensemblGenes$external_gene_name[match(rownames(dIC_seurat3@assays$RNA@data),
+ensemblGenes$ensembl_gene_id)])
+
+cnt_norm = as.matrix(dIC_seurat3@assays$RNA@data)
+mat_z = t(scale(t(cnt_norm)))
+mat_z = mat_z[!is.na(rowSums(mat_z)),]
+
+for (signature in c("MEF.identity", "Pluripotency", "Neural.identity")) {
+  geneset = as.character(wot_sig[,signature])
+  all_z = data.frame(means=colMeans(mat_z[rownames(mat_z) %in% geneset,]))
   
-
-  df = data.frame(x=miPSC_seurat3@reductions$umap@cell.embeddings[,1], 
-                  y=miPSC_seurat3@reductions$umap@cell.embeddings[,2],
-                  expression= Edat[,i])
-  
-  df = df[order(df$expression),]
-  q=ggplot(df,aes(x=x, y=y, colour=expression)) +
-    geom_point(size=0.3) +
-    scale_color_viridis(option = "D",
-                        guide = guide_colourbar(ticks = F, barheight = 15, barwidth = 2))+
-    theme_bw() +   
-    theme(axis.line=element_blank(),
-          axis.text.x=element_blank(),
-          axis.text.y=element_blank(),
-          axis.ticks=element_blank(),
-          axis.title.x=element_blank(),
-          axis.title.y=element_blank(),
-          panel.background=element_blank(),
-          panel.border=element_blank(),
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
-          plot.background=element_blank(),
-          legend.text=element_blank(),
-          legend.position = "none",
-          legend.title = element_blank()
-    )
-  
-  pdf(paste0("Figure_Umap_", colnames(phen_crit)[i], "_z.pdf"), onefile = FALSE)    
-  print(q)
-  dev.off()
-}
-
-```
-
-
-## Plot pluripotency markers 
-```{r pressure, echo=FALSE}
-genes = c("Pou5f1", "Nanog", "Zfp42", "Dppa4", "Esrrb", "Dppa5a", "Sox2", "Nes")
-
-for(i in 1:length(genes)){
-
-df = data.frame(x=seurat_object@reductions$umap@cell.embeddings[,1],
-                y=seurat_object@reductions$umap@cell.embeddings[,2],
-                expression= seurat_object@assays$RNA@data[ensemblGenes$ensembl_gene_id[ensemblGenes$external_gene_name %in% mode],] )
-df = df[order(df$expression),]
-
-p <- ggplot(df,aes(x=x, y=y, colour=expression)) +
-  geom_point(size=0.3) +
-  scale_color_viridis(option = "D",
-                      guide = guide_colourbar(ticks = F, barheight = 15, barwidth = 2))+
-  theme_bw() +
-  theme(axis.line=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks=element_blank(),
-        axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.background=element_blank(),
-        panel.border=element_blank(),
-        panel.grid.major=element_blank(),
-        panel.grid.minor=element_blank(),
-        plot.background=element_blank(),
-        legend.text=element_blank(),
-        legend.title = element_blank()
-  )
-        pdf(paste0("Figure_Umap_", i,"_iPNSC.pdf"), onefile = FALSE)    
-        print(p)
-        dev.off()
-
-}
+  df = data.frame(x=DIC_seurat3_sub@reductions$umap@cell.embeddings[,1], 
+                  y=DIC_seurat3_sub@reductions$umap@cell.embeddings[,2],
+                  expression=all_z[,1]) 
+    df = df[order(df$expression),]
+    p=ggplot(df,aes(x=x, y=y, colour=expression)) +
+      geom_point(size=1) +
+      scale_color_viridis(option = "D",
+                          # limits = c(-1, 1),
+                          guide = guide_colourbar(ticks = F, barheight = 15, barwidth = 2))+
+      theme_bw() +
+      theme(plot.title = element_text(size = 20, face = "italic", hjust = 0.5),
+            axis.line=element_blank(),
+            axis.text.x=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks=element_blank(),
+            axis.title.x=element_blank(),
+            axis.title.y=element_blank(),
+            panel.background=element_blank(),
+            panel.border=element_blank(),
+            panel.grid.major=element_blank(),
+            panel.grid.minor=element_blank(),
+            plot.background=element_blank(),
+            legend.text=element_text(size=17),
+            legend.title = element_blank()
+      )
+    ggsave(paste0("figure_umap_", genename,".png"), p, width = 7, height = 7)
+    }
 
 ```
 
@@ -184,7 +100,7 @@ p <- ggplot(df,aes(x=x, y=y, colour=expression)) +
 ```{r pressure, echo=FALSE}
 
 genes = c("Pou5f1", "Nanog", "Zfp42", "Esrrb", "Dppa4", "Dppa5a", "Sall4", "Sox2")
-genes_mat = as.matrix(miPSC_seurat3@assays$RNA@data[ensemblGenes$ensembl_gene_id[ensemblGenes$external_gene_name %in% genes], ])
+genes_mat = as.matrix(dIC_seurat3@assays$RNA@data[ensemblGenes$ensembl_gene_id[ensemblGenes$external_gene_name %in% genes], ])
 rownames(genes_mat) = ensemblGenes$external_gene_name[match(rownames(genes_mat), ensemblGenes$ensembl_gene_id, nomatch = 0)]
 genes_mat = genes_mat[genes, ]
 
@@ -192,18 +108,18 @@ genes_mat = genes_mat[genes, ]
 ############### iPSC route
 condition = c("D2", "D4", "D5", "D6_iPSC", "D7_iPSC", "D8_iPSC", "D10_iPSC", "iPSC")
 
-count_sorted<- data.frame(rowMeans(genes_mat[,miPSC_seurat3$condition == "MEF"]))
+count_sorted<- data.frame(rowMeans(genes_mat[,dIC_seurat3$condition == "MEF"]))
 for(i in condition){
-  count_sorted <- cbind(count_sorted, data.frame(rowMeans(genes_mat[,miPSC_seurat3$condition==i])))
+  count_sorted <- cbind(count_sorted, data.frame(rowMeans(genes_mat[,dIC_seurat3$condition==i])))
 }
 colnames(count_sorted) = c("MEF", condition)
 
-count_sorted<- genes_mat[,miPSC_seurat3$condition == "MEF"]
+count_sorted<- genes_mat[,dIC_seurat3$condition == "MEF"]
 for(i in condition){
-  count_sorted <- cbind(count_sorted, genes_mat[,miPSC_seurat3$condition==i])
+  count_sorted <- cbind(count_sorted, genes_mat[,dIC_seurat3$condition==i])
 }
 
-cl_t<-table(miPSC_seurat3$condition)
+cl_t<-table(dIC_seurat3$condition)
 x<-c()
 for(i in c("MEF", condition)){
   x <- append(x,rep(i,cl_t[[i]]))
@@ -254,18 +170,18 @@ dev.off()
 ############### iNSC route
 condition = c("D2", "D4", "D5", "D6_iNSC", "D7_iNSC", "D8_iNSC", "D10_iNSC", "iNSC")
 
-count_sorted<- data.frame(rowMeans(genes_mat[,miPSC_seurat3$condition == "MEF"]))
+count_sorted<- data.frame(rowMeans(genes_mat[,dIC_seurat3$condition == "MEF"]))
 for(i in condition){
-  count_sorted <- cbind(count_sorted, data.frame(rowMeans(genes_mat[,miPSC_seurat3$condition==i])))
+  count_sorted <- cbind(count_sorted, data.frame(rowMeans(genes_mat[,dIC_seurat3$condition==i])))
 }
 colnames(count_sorted) = c("MEF", condition)
 
-count_sorted<- genes_mat[,miPSC_seurat3$condition == "MEF"]
+count_sorted<- genes_mat[,dIC_seurat3$condition == "MEF"]
 for(i in condition){
-  count_sorted <- cbind(count_sorted, genes_mat[,miPSC_seurat3$condition==i])
+  count_sorted <- cbind(count_sorted, genes_mat[,dIC_seurat3$condition==i])
 }
 
-cl_t<-table(miPSC_seurat3$condition)
+cl_t<-table(dIC_seurat3$condition)
 x<-c()
 for(i in c("MEF", condition)){
   x <- append(x,rep(i,cl_t[[i]]))
