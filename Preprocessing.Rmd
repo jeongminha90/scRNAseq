@@ -1,5 +1,5 @@
 ---
-title: "preprocessing"
+title: "Preprocessing"
 author: "Bum Suk Kim"
 date: '2020 12 14 '
 output: html_document
