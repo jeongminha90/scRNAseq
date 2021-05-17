@@ -10,32 +10,46 @@ output: html_document
 library(Seurat)
 library(slingshot)
 library(scran)
-load("DIC_seurat3_sub_all_re.RData")
+dIC_seurat3 = readRDs("")
 ```
 
+
+
+## Preprocessing
 ```{r setup, include=FALSE}
-sce_QC <- SingleCellExperiment(assays = list(counts = DIC_seurat3_sub@assays$RNA@counts[DIC_seurat3_sub$condition %in% c("D5", "D6_iNSC", "D7_iNSC", "D6_iPSC", "D7_iPSC",)]))
+sce_QC <- SingleCellExperiment(assays = list(counts = dIC_seurat3@assays$RNA@counts[DIC_seurat3_sub$condition %in% c("D5", "D6_iNSC", "D7_iNSC", "D6_iPSC", "D7_iPSC",)]))
 sce_QC = sce_QC[rowSums(counts(sce_QC))>0,]
 clusters <- quickCluster(sce_QC)
 sce_QC <- computeSumFactors(sce_QC, cluster=clusters)
 sce_norm = normalize(sce_QC)
+
 dec <- modelGeneVar(sce_norm)
 top.hvgs <- getTopHVGs(dec, fdr.threshold = 0.05)
+
+dIC_seurat3_sub = CreateSeuratObject(counts = counts(sce_norm), project = "iNPSC_D5_D7", min.cells = 1, min.features = 1)
+dIC_seurat3_sub@var.genes <- top.hvgs
+dIC_seurat3_sub@assays$RNA@data = logcounts(sce_norm)
+dIC_seurat3_sub$condition = dIC_seurat3$condition[colnames(dIC_seurat3_sub)]
+dIC_seurat3_sub <- ScaleData(dIC_seurat3_sub)
+dIC_seurat3_sub <- RunPCA(dIC_dIC_seurat3_subseurat3)
+dIC_seurat3_sub <- RunUMAP(dIC_seurat3_sub, dims = 1:25)
+
+dIC_seurat3_sub <- FindNeighbors(dIC_seurat3_sub, dims = 1:30)
+dIC_seurat3_sub <- FindClusters(dIC_seurat3_sub, resolution = .6)
 ```
 
-
+## Run slingshot
 ```{r setup, include=FALSE}
-sds = slingshot(DIC_seurat3_sub@reductions$umap@cell.embeddings, DIC_seurat3_sub@active.ident,
-               start.clus = 1)
+sds = slingshot(dIC_seurat3_sub@reductions$umap@cell.embeddings, dIC_seurat3_sub@active.ident, start.clus = 1)
 ```
-
+## Get curves
 ```{r setup, include=FALSE}
 lineages <- getCurves(sds)
 ```
-
+## Plot curves
 ```{r setup, include=FALSE}
-plot(DIC_seurat3_sub@reductions$umap@cell.embeddings[,1],
-     DIC_seurat3_sub@reductions$umap@cell.embeddings[,2],
+plot(dIC_seurat3_sub@reductions$umap@cell.embeddings[,1],
+     dIC_seurat3_sub@reductions$umap@cell.embeddings[,2],
      pch=16, asp = 1, col = "red")
 lines(SlingshotDataSet(lineages), lwd=2, col='black')
 ```
