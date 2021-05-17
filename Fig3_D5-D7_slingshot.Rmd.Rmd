@@ -9,9 +9,20 @@ output: html_document
 ```{r setup, include=FALSE}
 library(Seurat)
 library(slingshot)
+library(scran)
 load("DIC_seurat3_sub_all_re.RData")
-
 ```
+
+```{r setup, include=FALSE}
+sce_QC <- SingleCellExperiment(assays = list(counts = DIC_seurat3_sub@assays$RNA@counts[DIC_seurat3_sub$condition %in% c("D5", "D6_iNSC", "D7_iNSC", "D6_iPSC", "D7_iPSC",)]))
+sce_QC = sce_QC[rowSums(counts(sce_QC))>0,]
+clusters <- quickCluster(sce_QC)
+sce_QC <- computeSumFactors(sce_QC, cluster=clusters)
+sce_norm = normalize(sce_QC)
+dec <- modelGeneVar(sce_norm)
+top.hvgs <- getTopHVGs(dec, fdr.threshold = 0.05)
+```
+
 
 ```{r setup, include=FALSE}
 sds = slingshot(DIC_seurat3_sub@reductions$umap@cell.embeddings, DIC_seurat3_sub@active.ident,
