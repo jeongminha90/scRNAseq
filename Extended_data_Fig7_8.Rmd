@@ -10,12 +10,12 @@ install previous version of Seurat
 ```{r setup, include=FALSE}
 install.packages('devtools')
 # Replace '2.3.0' with your desired version
-devtools::install_version(package = 'Seurat', version = package_version('3.1.5'))
+devtools::install_version(package = 'Seurat', version = package_version('3.2.2'))
 ```
 
 ## Load required libraries and input files.
 ```{r setup, include=FALSE}
-library(Seurat)  ##v3.1.5
+library(Seurat)  ##v3.2.2
 library(ggplot2)
 library(dplyr)
 library(viridis)
