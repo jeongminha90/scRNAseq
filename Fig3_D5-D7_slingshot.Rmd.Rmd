@@ -1,0 +1,30 @@
+---
+title: "Fig3_D5-D7_slingshot.Rmd"
+author: "Bum Suk Kim"
+date: '2021 5 18 '
+output: html_document
+---
+
+## Load required libraries and input files
+```{r setup, include=FALSE}
+library(Seurat)
+library(slingshot)
+load("DIC_seurat3_sub_all_re.RData")
+
+```
+
+```{r setup, include=FALSE}
+sds = slingshot(DIC_seurat3_sub@reductions$umap@cell.embeddings, DIC_seurat3_sub@active.ident,
+               start.clus = 1)
+```
+
+```{r setup, include=FALSE}
+lineages <- getCurves(sds)
+```
+
+```{r setup, include=FALSE}
+plot(DIC_seurat3_sub@reductions$umap@cell.embeddings[,1],
+     DIC_seurat3_sub@reductions$umap@cell.embeddings[,2],
+     pch=16, asp = 1, col = "red")
+lines(SlingshotDataSet(lineages), lwd=2, col='black')
+```
