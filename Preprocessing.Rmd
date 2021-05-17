@@ -12,6 +12,7 @@ library(DropletUtils)
 library(scater)
 library(biomaRt)
 library(scran)
+library(Matrix)
 library(Seurat)
 ```
 14 samples are agrregated by "cellranger aggr"
