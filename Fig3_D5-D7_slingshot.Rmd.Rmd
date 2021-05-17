@@ -13,8 +13,6 @@ library(scran)
 dIC_seurat3 = readRDs("")
 ```
 
-
-
 ## Preprocessing
 ```{r setup, include=FALSE}
 sce_QC <- SingleCellExperiment(assays = list(counts = dIC_seurat3@assays$RNA@counts[DIC_seurat3_sub$condition %in% c("D5", "D6_iNSC", "D7_iNSC", "D6_iPSC", "D7_iPSC",)]))
