@@ -6,20 +6,13 @@ output: html_document
 ---
 
 
-Install previous version of Seurat
-```{r setup, include=FALSE}
-install.packages('devtools')
-# Replace '2.3.0' with your desired version
-devtools::install_version(package = 'Seurat', version = package_version('2.3.3'))
-```
-
 ## Load required libraries.
 ```{r setup, include=FALSE}
 library(DropletUtils)
 library(scater)
 library(biomaRt)
 library(scran)
-library(Seurat) ## v2.2.3
+library(Seurat)
 ```
 14 samples are agrregated by "cellranger aggr"
 
@@ -100,30 +93,27 @@ scesetFiltered= scesetFiltered[,colData(scesetFiltered)[,"log10_total_features_b
 
 ## Normalization
 ```{r pressure, echo=FALSE}
-library(scran)
-clusters <- quickCluster(scesetFiltered, method= "igraph")
+scesetFiltered = scesetFiltered[rowSums(counts(scesetFiltered))>0,]
+clusters <- quickCluster(scesetFiltered)
 scesetFiltered <- computeSumFactors(scesetFiltered, cluster=clusters)
-scesetFiltered <- normalize(scesetFiltered)
-save(scesetFiltered, file = "scesetFiltered.RData")
+sce_norm = normalize(scesetFiltered)
 ```
 
 
 ## Find highly variable genes(HVGs)
 ```{r pressure, echo=FALSE}
-var.fit <- trendVar(scesetFiltered, parametric=TRUE, use.spikes=F)
-var.out <- decomposeVar(scesetFiltered, var.fit)
-hvg <- var.out[which(var.out$FDR <= 0.05 & var.out$bio > .1),]
-hvg <- hvg[order(hvg$bio, decreasing=TRUE),]
-
+dec <- modelGeneVar(sce_norm)
+top.hvgs <- getTopHVGs(dec, fdr.threshold = 0.05)
 ```
 
 
 ## Make seurat object
 ```{r pressure, echo=FALSE}
-miPSC_seurat <- Convert(scesetFiltered, to = "seurat")  ### Seurat v2 object
-miPSC_seurat@var.genes <- rownames(hvg)
-miPSC_seurat@scale.data <- logcounts(scesetFiltered[rownames(hvg),])
-miPSC_seurat <- RunPCA(miPSC_seurat,pcs.compute =50, weight.by.var = FALSE)
-miPSC_seurat <- RunUMAP(miPSC_seurat, reduction.use = "pca", dims.use = 1:30)
-save(miPSC_seurat, file = "miPSC_seurat.RData")
+dIC_seurat3 = CreateSeuratObject(counts = counts(sce_norm), project = "iNPSC_all", min.cells = 1, min.features = 1)
+dIC_seurat3@var.genes <- top.hvgs
+dIC_seurat3@assays$RNA@data = logcounts(sce_norm)
+dIC_seurat3$condition = colData(sce_norm)$condition
+dIC_seurat3 <- ScaleData(dIC_seurat3)
+dIC_seurat3 <- RunPCA(dIC_seurat3)
+dIC_seurat3 <- RunUMAP(dIC_seurat3, dims = 1:50)
 ```
