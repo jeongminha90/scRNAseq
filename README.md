@@ -11,6 +11,7 @@
 
 ### Extended_data_Fig7_9_whole_cells.Rmd
 * Rmarkdown for generation of UMAPs for whole cells and masking the signatures in Extended data figure 7 & 8
+* [`dIC_seurat3_whole.rds`](https://figshare.com/s/d083a7d6649a6e83f875): raw 10xGenomics output data
 
 ### Fig3_D5-D7_slingshot.Rmd
 * Rmarkdown for preprocessing and trajectory of D5~D7 iPSC/iNSC reprogramming intermediate cells
