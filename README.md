@@ -16,4 +16,5 @@
 ### Fig3_D5-D7_slingshot.Rmd
 * Rmarkdown for preprocessing and trajectory of D5~D7 iPSC/iNSC reprogramming intermediate cells
 
-
+### wot_command_line.sh
+* Rmarkdown for wot analysis of D5~D7 iPSC/iNSC reprogramming intermediate cells
