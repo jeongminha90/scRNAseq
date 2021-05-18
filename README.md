@@ -12,7 +12,7 @@
 ### Extended_data_Fig7_8.Rmd
 * Rmarkdown for generation of UMAPs for whole cells and masking the signatures in Extended data figure 7 & 8
 
-### Fig3_D5-D7_tranjectory_signature.Rmd
+### Fig3_D5-D7_slingshot.Rmd
 * Rmarkdown for trajectory and cell signature analyses of D5~D7 iPSC/iNSC reprogramming intermediate cells
 
 
