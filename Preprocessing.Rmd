@@ -108,7 +108,7 @@ top.hvgs <- getTopHVGs(dec, fdr.threshold = 0.05)
 ```
 
 
-## Make seurat object
+## Create seurat object
 ```{r pressure, echo=FALSE}
 dIC_seurat3 = CreateSeuratObject(counts = counts(sce_norm), project = "iNPSC_all", min.cells = 1, min.features = 1)
 dIC_seurat3@var.genes <- top.hvgs
