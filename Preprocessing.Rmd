@@ -116,7 +116,7 @@ dIC_seurat3@assays$RNA@data = logcounts(sce_norm)
 dIC_seurat3$condition = colData(sce_norm)$condition
 dIC_seurat3 <- ScaleData(dIC_seurat3)
 dIC_seurat3 <- RunPCA(dIC_seurat3)
-dIC_seurat3 <- RunUMAP(dIC_seurat3, dims = 1:50)
+dIC_seurat3 <- RunUMAP(dIC_seurat3, dims = 1:50, n.neighbors = 10L,)
 
 saveRDS(dIC_seurat3, file = "dIC_seurat3_whole.rds")
 ```
