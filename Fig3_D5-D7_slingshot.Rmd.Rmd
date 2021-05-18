@@ -10,7 +10,7 @@ output: html_document
 library(Seurat)
 library(slingshot)
 library(scran)
-dIC_seurat3 = readRDs("")
+dIC_seurat3 = readRDs("dIC_seurat3_whole.rds")
 ```
 
 ## Preprocessing
